@@ -12,3 +12,7 @@ Feature:
   * The default expiration date is 1 month and can be changed in the settings.
   * You can change the created folder name (Temporary Bookmarks) later.
   * The same applies to bookmarks moved to Temporary Bookmarks folder.
+
+<br/>
+
+Firefox [Add-ons page](https://addons.mozilla.org/ja/firefox/addon/temporary_bookmarks/)
