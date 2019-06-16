@@ -1,0 +1,34 @@
+{
+  "name": "Temporary Bookmarks",
+  "version": "0.0.1",
+  "description": "Automatically delete expired bookmarks in a folder.",
+  "icons": {
+    "128": "icons/icon-128.png",
+    "48": "icons/icon-48.png",
+    "19": "icons/icon-19.png",
+    "16": "icons/icon-16.png"
+  },
+  "permissions": [
+    "<all_urls>",
+    "bookmarks",
+    "tabs",
+    "storage"
+  ],
+  "options_ui": {
+    "chrome_style": true,
+    "open_in_tab": true,
+    "page": "index.html"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon-19.png",
+    "default_title": "temporary bookmarks"
+  },
+  "background": {
+    "scripts": [
+      "js/define.js",
+      "js/background.js"
+    ],
+    "persistent": false
+  },
+  "manifest_version": 2
+}

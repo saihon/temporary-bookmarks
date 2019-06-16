@@ -1,0 +1,17 @@
+@charset "utf8";
+
+h1 {
+    text-align: center;
+    font-size: 26px;
+    height: 40px;
+    padding-top: 10px;
+    border-bottom: 1px solid gray;
+}
+
+#expiration-box{
+    box-sizing: border-box;
+    height: 60px;
+    width: 220px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
