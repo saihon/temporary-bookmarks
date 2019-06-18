@@ -1,68 +1,11 @@
 'use strict';
 
-let deleteBookmark = (timeInMs, expirationMs, folderId) => {
-    chrome.bookmarks.getChildren(folderId, (children) => {
-        // when not an error, runtime.lastError is undefined in chrome and null
-        // in firefox
-        if (chrome.runtime.lastError) {
-            return;
-        }
-
-        // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/bookmarks/BookmarkTreeNode
-        // node is created BookmarkTreeNode.
-        // Verified that node.dateAdded and Date.now() return the same value.
-        // console.log("dateAdded:", node.dateAdded);
-        // console.log("Date now :", Date.now());
-
-        for (let c of children) {
-            // If child is a folder,
-            // url is `undefined` on both chrome and firefox.
-            if (typeof c['url'] == 'undefined') {
-                deleteBookmark(timeInMs, expirationMs, c.id);
-                continue;
-            }
-
-            let elapsedMs = timeInMs - c.dateAdded;
-            if (elapsedMs > expirationMs) {
-                chrome.bookmarks.remove(c.id, () => {
-                    if (chrome.runtime.lastError) {
-                        return;
-                    }
-                    chrome.browserAction.getBadgeText({}, (text) => {
-                        chrome.browserAction.setBadgeText(
-                            {text : ((text - 0) + 1) + ''});
-                    });
-                });
-            }
-        }
-    });
-};
-
-// Delete expired bookmarks.
-chrome.storage.sync.get('settings', (item) => {
-    if (!item.settings) {
-        item['settings'] = DEFAULT_SETTINGS;
-        chrome.storage.sync.set(item);
-    }
-
-    if (item.settings.folderId == '') {
-        return;
-    }
-
-    chrome.browserAction.setBadgeBackgroundColor({color : [ 0, 51, 204, 255 ]});
-
-    deleteBookmark(Date.now(),
-                   EXPIRATION_TIMES[item.settings.key],
-                   item.settings.folderId);
-
-    setTimeout(() => {
-        chrome.browserAction.setBadgeText({text : ''});
-    }, 1000 * 60); // 1 minutes
-});
+// What to do when starting the browser
+deleteBookmark();
 
 let createFolder = (callback) => {
     chrome.bookmarks.create({title : FOLDER_NAME, index : 0}, (result) => {
-        chrome.storage.sync.get('settings', (item) => {
+        chrome.storage.sync.get(STORAGE_KEY, (item) => {
             item.settings.folderId = result.id;
             chrome.storage.sync.set(item);
             if (callback) callback(item.settings.folderId);
@@ -113,7 +56,7 @@ let getCurrentTab = (tabs) => {
 
     let info = {index : 0, parentId : '', title : tab.title, url : tab.url};
 
-    chrome.storage.sync.get('settings', (item) => {
+    chrome.storage.sync.get(STORAGE_KEY, (item) => {
         if (item.settings.folderId == '') {
             createFolder((folderId) => {
                 info.parentId = folderId

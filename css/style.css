@@ -8,10 +8,16 @@ h1 {
     border-bottom: 1px solid gray;
 }
 
-#expiration-box{
+#expiration-box {
     box-sizing: border-box;
     height: 60px;
     width: 220px;
-    margin: 0 auto;
-    padding-top: 20px;
+    margin: 30px auto 0;
+}
+
+#delete-box {
+    box-sizing: border-box;
+    height: 60px;
+    width: 320px;
+    margin: 10px auto 0;
 }
