@@ -17,6 +17,7 @@ let EXPIRATION_TIMES = {
 let DEFAULT_SETTINGS = {
     key : 4, // 1month
     folderId : '',
+    disable : false,
 };
 
 let _deleteBookmarkRecursively = (timeInMs, expirationMs, folderId) => {
@@ -63,6 +64,10 @@ let deleteBookmark = () => {
         if (!item.settings) {
             item[STORAGE_KEY] = DEFAULT_SETTINGS;
             chrome.storage.sync.set(item);
+        }
+
+        if (item.settings.disable) {
+            return;
         }
 
         if (item.settings.folderId == '') {

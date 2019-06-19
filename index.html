@@ -9,11 +9,17 @@
 
 <body>
   <h1>TemporaryBookmarks Options</h1>
-  <div>
-
-    <div id="expiration-box">
+  <div id="box">
+    <div class="row">
+      <form name="formCheck">
+        <label>Disable delete bookmarks at browser start:&nbsp;
+          <input type="checkbox" name="disable" value="">
+        </label>
+      </form>
+    </div><!-- end .row -->
+    <div class="row">
       <form name="formSelect">
-        <label>expiration:&nbsp;
+        <label>Expiration date:&nbsp;
           <select name="expiration">
             <option value="0">&nbsp;1 Day</option>
             <option value="1">&nbsp;3 Day</option>
@@ -24,16 +30,14 @@
           </select>
         </label>
       </form>
-    </div>
-
-    <div id="delete-box">
+    </div><!-- end .row -->
+    <div class="row">
       <label>
         Delete expired bookmarks:&nbsp;
         <button id="delete-button">delete</button>
       </label>
-    </div>
-
-  </div>
+    </div><!-- end .row -->
+  </div><!-- #box -->
   <script src="js/define.js"></script>
   <script src="js/options.js"></script>
 </body>
