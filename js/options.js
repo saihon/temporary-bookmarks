@@ -6,15 +6,9 @@ class Counter {
     constructor(folderId, expirationKey) {
         this.element = document.getElementById('count');
     }
-
-    foo() {
-        return this;
-    }
-
     reset() {
         this.element.textContent = '0';
     }
-
     count(id) {
         this.element.textContent = ((this.element.textContent - 0) + 1) + '';
     }
