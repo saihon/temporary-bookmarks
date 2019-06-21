@@ -1,7 +1,7 @@
 'use strict';
 
 // What to do when starting the browser
-deleteBookmark();
+deleteBookmarks(true);
 
 let createFolder = (callback) => {
     chrome.bookmarks.create({title : FOLDER_NAME, index : 0}, (result) => {

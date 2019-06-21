@@ -1,8 +1,35 @@
 'use strict';
 
+let counter;
+
+class Counter {
+    constructor(folderId, expirationKey) {
+        this.element = document.getElementById('count');
+    }
+
+    foo() {
+        return this;
+    }
+
+    reset() {
+        this.element.textContent = '0';
+    }
+
+    count(id) {
+        this.element.textContent = ((this.element.textContent - 0) + 1) + '';
+    }
+}
+
 chrome.storage.sync.get(STORAGE_KEY, (item) => {
     document.formCheck.disable.checked           = item.settings.disable;
     document.formSelect.expiration.selectedIndex = item.settings.key;
+
+    counter = new Counter();
+
+    walkfolders(item.settings.folderId,
+                Date.now(),
+                EXPIRATION_TIMES[item.settings.key],
+                counter.count.bind(counter));
 });
 
 let changedDisableCheckbox = (e) => {
@@ -29,5 +56,18 @@ let changedExpirationSelect = (e) => {
 document.formSelect.expiration.addEventListener(
     "change", changedExpirationSelect, false);
 
+let clickedDeleteButton = () => {
+    counter.reset();
+    deleteBookmarks(false);
+    setTimeout(() => {
+        chrome.storage.sync.get(STORAGE_KEY, (item) => {
+            walkfolders(item.settings.folderId,
+                        Date.now(),
+                        EXPIRATION_TIMES[item.settings.key],
+                        counter.count.bind(counter));
+        });
+    }, 1000);
+};
+
 document.getElementById('delete-button')
-    .addEventListener("click", deleteBookmark, false);
+    .addEventListener("click", clickedDeleteButton, false);
