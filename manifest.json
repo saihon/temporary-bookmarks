@@ -1,6 +1,6 @@
 {
   "name": "Temporary Bookmarks",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Automatically delete expired bookmarks in a folder.",
   "icons": {
     "128": "icons/icon-128.png",

@@ -1,9 +1,10 @@
 'use strict';
 
 // What to do when starting the browser
-deleteBookmarks(true);
+const ObeyDisabledSetting = true;
+deleteBookmarks(ObeyDisabledSetting);
 
-let createFolder = (callback) => {
+const createFolder = (callback) => {
     chrome.bookmarks.create({title : FOLDER_NAME, index : 0}, (result) => {
         chrome.storage.sync.get(STORAGE_KEY, (item) => {
             item.settings.folderId = result.id;
@@ -15,7 +16,7 @@ let createFolder = (callback) => {
 
 // create bookmark and displays badge (hide after 1400 milliseconds) to toolbar
 // button.
-let createBookmark = (info, tabId, recover) => {
+const createBookmark = (info, tabId, recover) => {
     // If not specify info.index in firefox, it will be in alphabet order,
     // so get the children length, for the add to the end of the folder.
     chrome.bookmarks.getChildren(info.parentId, (children) => {
@@ -47,14 +48,13 @@ let createBookmark = (info, tabId, recover) => {
     });
 };
 
-let getCurrentTab = (tabs) => {
+const getCurrentTab = (tabs) => {
     if (tabs.length == 0) {
         return;
     }
 
-    let tab = tabs[0];
-
-    let info = {index : 0, parentId : '', title : tab.title, url : tab.url};
+    const tab  = tabs[0];
+    const info = {index : 0, parentId : '', title : tab.title, url : tab.url};
 
     chrome.storage.sync.get(STORAGE_KEY, (item) => {
         if (item.settings.folderId == '') {
@@ -70,7 +70,7 @@ let getCurrentTab = (tabs) => {
     });
 };
 
-let onClicked = () => {
+const onClicked = () => {
     chrome.tabs.query({currentWindow : true, active : true}, getCurrentTab);
 };
 
