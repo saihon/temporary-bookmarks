@@ -60,13 +60,13 @@ const _deleteOne = (id) => {
 const deleteBookmarks = (obeyDisabled) => {
     // Delete expired bookmarks.
     chrome.storage.sync.get(STORAGE_KEY, (item) => {
-        if (!item.settings) {
+        if (!item[STORAGE_KEY]) {
             item[STORAGE_KEY] = DEFAULT_SETTINGS;
             chrome.storage.sync.set(item);
         }
 
         // "settings.day" is a new property, so may not have.
-        if (!item.settings.day) {
+        if (!item[STORAGE_KEY]["day"]) {
             item['day'] = DEFAULT_SETTINGS.day;
             chrome.storage.sync.set(item);
         }

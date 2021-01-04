@@ -18,6 +18,13 @@ class Counter {
 }
 
 chrome.storage.sync.get(STORAGE_KEY, (item) => {
+    if (!item[STORAGE_KEY]) {
+        item[STORAGE_KEY] = DEFAULT_SETTINGS;
+    }
+    if (!item[STORAGE_KEY]["day"]) {
+        item[STORAGE_KEY]["day"] = DEFAULT_SETTINGS.day;
+    }
+
     document.formCheck.disable.checked   = item.settings.disable;
     document.formNumber.expiration.value = item.settings.day - 0;
 
