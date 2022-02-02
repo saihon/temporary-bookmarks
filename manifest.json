@@ -25,7 +25,7 @@
   },
   "background": {
     "scripts": [
-      "js/define.js",
+      "js/bookmarks.js",
       "js/background.js"
     ],
     "persistent": false
