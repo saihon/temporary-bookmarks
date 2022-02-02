@@ -3,10 +3,9 @@
 ///////////////////////
 // Delete buttun
 ///////////////////////
-let counter;
 
-class Counter {
-    constructor(folderId, expirationKey) {
+const counter = (new class Counter {
+    constructor() {
         this.element = document.getElementById('count');
     }
     reset() {
@@ -15,37 +14,30 @@ class Counter {
     count(id) {
         this.element.textContent = ((this.element.textContent - 0) + 1) + '';
     }
-}
+}());
 
-chrome.storage.sync.get(STORAGE_KEY, (item) => {
-    if (!item[STORAGE_KEY]) {
-        item[STORAGE_KEY] = DEFAULT_SETTINGS;
-    }
-    if (!item[STORAGE_KEY]["day"]) {
-        item[STORAGE_KEY]["day"] = DEFAULT_SETTINGS.day;
-    }
-
+storages.get(item => {
     document.formCheck.disable.checked   = item.settings.disable;
     document.formNumber.expiration.value = item.settings.day - 0;
-
-    counter = new Counter();
-
-    walkfolders(item.settings.folderId,
-                Date.now(),
-                item.settings.day * DAY_MS,
-                counter.count.bind(counter));
+    folders.walk(item.settings.folderId,
+                 Date.now(),
+                 item.settings.day * DAY_MILLISECONDS,
+                 counter.count.bind(counter));
 });
 
 const clickedDeleteButton = () => {
     counter.reset();
-    const ObeyDisabledSetting = false;
-    deleteBookmarks(ObeyDisabledSetting);
+
+    // Specifying false, can delete the bookmark even if "Disable Delete" is on.
+    const obeyDisabledSettings = false;
+    bookmarks.remove(obeyDisabledSettings);
+
     setTimeout(() => {
-        chrome.storage.sync.get(STORAGE_KEY, (item) => {
-            walkfolders(item.settings.folderId,
-                        Date.now(),
-                        item.settings.day * DAY_MS,
-                        counter.count.bind(counter));
+        storages.get(item => {
+            folders.walk(item.settings.folderId,
+                         Date.now(),
+                         item.settings.day * DAY_MILLISECONDS,
+                         counter.count.bind(counter));
         });
     }, 1000);
 };
@@ -58,10 +50,10 @@ document.getElementById('delete-button')
 ///////////////////////////////
 const changedDisableCheckbox = (e) => {
     e.preventDefault();
-    chrome.storage.sync.get(STORAGE_KEY, (item) => {
+    storages.get(item => {
         if (!item.settings) return;
         item.settings.disable = document.formCheck.disable.checked;
-        chrome.storage.sync.set(item);
+        storages.set(item);
     });
 };
 
@@ -87,10 +79,10 @@ const changedExpirationNumber = () => {
         return;
     }
 
-    chrome.storage.sync.get(STORAGE_KEY, (item) => {
+    storages.get(item => {
         if (!item.settings) return;
         item.settings.day = document.formNumber.expiration.value;
-        chrome.storage.sync.set(item);
+        storages.set(item);
     });
 };
 
