@@ -115,9 +115,8 @@ function badgeText(details) {
 function badgeIncrement() {
     // https://developer.chrome.com/docs/extensions/reference/browserAction/#method-getBadgeText
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserAction/getBadgeText
-    chrome.browserAction.getBadgeText({}, text => {
-        badgeText({text : ((text - 0) + 1) + ''});
-    });
+    chrome.browserAction.getBadgeText(
+        {}, text => { badgeText({text : ((text - 0) + 1) + ''}); });
 }
 
 function badgeColor(details) {
@@ -133,13 +132,20 @@ function badgeReset(details, timeout) {
     details['text'] = '';
 
     if (timeout) {
-        setTimeout(() => {badgeText(details)}, timeout);
+        setTimeout(() => {
+            badgeText(details);
+            // Reset badge text didn't work when launching the browser, but
+            // adding the following code will work. I don't know why.
+            console.log('badge reset!');
+        }, timeout);
         return;
     }
     badgeText(details);
 }
 
 const DAY_MILLISECONDS = 86400000; // 1 day millisecond
+
+const BADGE_RESET_MILLISECONDS = 1000 * 60; // 1 min
 
 // https://developer.chrome.com/docs/extensions/reference/bookmarks/
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/bookmarks
@@ -160,6 +166,8 @@ const bookmarks = (new class Bookmarks {
     remove(obeyDisabledSettings) {
         const self = this;
 
+        badgeReset(null, BADGE_RESET_MILLISECONDS);
+
         // Delete expired bookmarks.
         storages.get(item => {
             if (obeyDisabledSettings && item.settings.disable) {
@@ -176,8 +184,6 @@ const bookmarks = (new class Bookmarks {
                          Date.now(),
                          item.settings.day * DAY_MILLISECONDS,
                          self._removeOne);
-
-            badgeReset(null, 1000 * 60); // 1 min
         });
     }
 
