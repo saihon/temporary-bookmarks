@@ -132,12 +132,7 @@ function badgeReset(details, timeout) {
     details['text'] = '';
 
     if (timeout) {
-        setTimeout(() => {
-            badgeText(details);
-            // Reset badge text didn't work when launching the browser, but
-            // adding the following code will work. I don't know why.
-            console.log('badge reset!');
-        }, timeout);
+        setTimeout(() => {badgeText(details)}, timeout);
         return;
     }
     badgeText(details);
@@ -166,8 +161,6 @@ const bookmarks = (new class Bookmarks {
     remove(obeyDisabledSettings) {
         const self = this;
 
-        badgeReset(null, BADGE_RESET_MILLISECONDS);
-
         // Delete expired bookmarks.
         storages.get(item => {
             if (obeyDisabledSettings && item.settings.disable) {
@@ -184,6 +177,8 @@ const bookmarks = (new class Bookmarks {
                          Date.now(),
                          item.settings.day * DAY_MILLISECONDS,
                          self._removeOne);
+
+            badgeReset(null, BADGE_RESET_MILLISECONDS);
         });
     }
 

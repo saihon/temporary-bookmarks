@@ -27,8 +27,7 @@
     "scripts": [
       "js/bookmarks.js",
       "js/background.js"
-    ],
-    "persistent": false
+    ]
   },
   "manifest_version": 2
 }
