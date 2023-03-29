@@ -8,12 +8,7 @@
     "19": "icons/icon-19.png",
     "16": "icons/icon-16.png"
   },
-  "permissions": [
-    "<all_urls>",
-    "bookmarks",
-    "tabs",
-    "storage"
-  ],
+  "permissions": ["<all_urls>", "bookmarks", "tabs", "storage"],
   "options_ui": {
     "chrome_style": true,
     "open_in_tab": true,
@@ -24,10 +19,12 @@
     "default_title": "temporary bookmarks"
   },
   "background": {
-    "scripts": [
-      "js/bookmarks.js",
-      "js/background.js"
-    ]
+    "scripts": ["js/bookmarks.js", "js/background.js"]
+  },
+  "commands": {
+    "add-bookmark": {
+      "description": "Add bookmarks to the folder"
+    }
   },
   "manifest_version": 2
 }
